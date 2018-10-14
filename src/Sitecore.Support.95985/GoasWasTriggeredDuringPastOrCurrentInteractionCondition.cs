@@ -52,12 +52,13 @@ namespace Sitecore.Support.Analytics.Rules.Conditions
       Assert.ArgumentNotNull((object)ruleContext, "ruleContext");
       Assert.IsNotNull((object)Tracker.Current, "Tracker.Current is not initialized");
       Assert.IsNotNull((object)Tracker.Current.Session, "Tracker.Current.Session is not initialized");
-      Assert.IsNotNull((object)Tracker.Current.Session.Interaction, "Tracker.Current.Session.Interaction is not initialized");
+      //Assert.IsNotNull((object)Tracker.Current.Session.Interaction, "Tracker.Current.Session.Interaction is not initialized");
       if (!this.GoalGuid.HasValue)
         return false;
-      if (Tracker.Current.Session.Interaction != null && this.HasEventOccurredInInteraction((IInteractionData)Tracker.Current.Session.Interaction))
-        return true;
-      Assert.IsNotNull((object)Tracker.Current.Contact, "Tracker.Current.Contact is not initialized");
+      Assert.IsNotNull((object)Tracker.Current.Contact, "Tracker.Current.Contact is not initialized");      
+      if (Tracker.Current.Session.Interaction != null)
+        if(this.HasEventOccurredInInteraction((IInteractionData)Tracker.Current.Session.Interaction))
+          return true;
       if (Tracker.Current.Interaction == null)
         Tracker.Current.Contact.LoadKeyBehaviorCache();
       return this.FilterKeyBehaviorCacheEntries(Tracker.Current.Contact.GetKeyBehaviorCache()).Any<KeyBehaviorCacheEntry>((Func<KeyBehaviorCacheEntry, bool>)(entry =>
